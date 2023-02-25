@@ -1,28 +1,40 @@
-const reponse = await fetch('http://localhost:5678/api/works');
-const image = await reponse.json();
+const url = 'http://localhost:5678/api/works';
 
-if(image) {
-    console.log(image);
-    document.querySelector('.gallery').innerHTML = " ";
-    genererArt(image);
-  } else {
-    console.log("Erreur lors de la récupération des données de l'API");
-  }
+function getData(url){
+  fetch(url)
+  .then(response => {
+    
+    console.log(response)
+    if(response.ok){
+      return response.json()
+      
+    }
+  })
+  
+  .then(function(data){
+    for(let i = 0; i < data.length; i++){
+      console.log(data[i]);
+       CreateElement(data[i])
+    }
+  })
+  document.querySelector('.gallery').innerHTML = " ";
+}
 
-function genererArt(image){
+getData(url);
 
-    const imagesContainer = document.querySelector('.gallery')
-    for (let i = 0; i < image.length; i++) {
-            const figure = document.createElement('figure')
-            const figureCaption = document.createElement('figcaption')
-            const figureImage = document.createElement('img')
+const imagesContainer = document.querySelector('.gallery')
+function CreateElement(data){
+  const figure = document.createElement('figure')
+  const figureCaption = document.createElement('figcaption')
+  const figureImage = document.createElement('img')
 
-            figureImage.src = image[i].imageUrl
-            figureImage.alt = image[i].title
-            figureCaption.innerHTML = image[i].title
+   figureImage.src = data.imageUrl
+   figureImage.alt = data.title
+   figureCaption.innerHTML = data.title
 
-            imagesContainer.appendChild(figure)
-            figure.appendChild(figureImage)
-            figure.appendChild(figureCaption)
-     }
+   imagesContainer.appendChild(figure)
+   figure.appendChild(figureImage)
+   figure.appendChild(figureCaption)
+
+  
 }
