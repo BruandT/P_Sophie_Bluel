@@ -143,7 +143,7 @@ li:hover {
 #tri li:nth-child(4){
 	padding: 0.4em 0.5em;
 }
-.tri-option{
+#tri li{
 	box-sizing: border-box;
 	border: 1px solid #1D6154;
 	border-radius: 60px;
@@ -155,7 +155,7 @@ li:hover {
 	text-align: center;
 	color: #1D6154;
 }
-.tri-option:active{
+#tri .tri-option{
 	color: white;
 	background-color: #1D6154;
 }
