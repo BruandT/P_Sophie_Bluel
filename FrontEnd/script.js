@@ -15,6 +15,7 @@ function RecupData(data){
 }
 
 RecupData(data)
+console.log(data);
 
 
 function CreateElement(data){
@@ -28,6 +29,7 @@ function CreateElement(data){
     figureImage.src = data.imageUrl
     figureImage.alt = data.title 
     figureCaption.innerHTML = data.title 
+    figure.setAttribute('data-category', data.categoryId)
 
     //liaison des enfants et des parents
     imagesContainer.appendChild(figure)
@@ -42,36 +44,30 @@ function ResetGallery(){
 }
   
 
-//tri des elements au clique
-let triOptions = document.querySelectorAll('.tri-option');
-triOptions.forEach((triOption) => {
-  triOption.addEventListener('click', () => {
-    //changement du bg et de la color
-    if (triOption.style.backgroundColor === '') {
-        triOption.style.backgroundColor = '#1D6154'
-        triOption.style.color = 'white';
-    } else {
-      triOption.style.backgroundColor = '';      
-      triOption.style.color = '#1D6154';
-    }   
-  });
-});
 
+//Partie filtre
+const liItem = document.querySelectorAll('#tri li');
+const figureItem = document.querySelectorAll('.gallery figure');
+liItem.forEach (li => {
+  li.onclick = function(){
+    //changement de class pour le clique (changement de style)
+    liItem.forEach(li => {
+      li.className = "";
+    })
+    li.className = "tri-option";
+    
+    
+    //Filtre
+    const valueCategories = li.getAttribute('data-categories');
+    console.log(valueCategories);
+    figureItem.forEach(figure => {
+      figure.style.display = 'none'
+      if (figure.getAttribute('data-category') == valueCategories || valueCategories == 'all') {
+        console.log(valueCategories);
+        figure.style.display = 'block'
+      }
+    })
+  }
+  
+})
 
-
-function CompareCategory(filtre){
-
-  // Récupérez la valeur personnalisée 'data-categories' de l'élément de liste
-  const categories = filtre.dataset.categories; 
-
-  // Séparez les catégories en une liste à l'aide de la méthode split()
-  const categoryList = categories.split(',');
-
-  for(let i in data){
-      
-      if(data[i].categoryId == categoryList){            
-          // creation des elements
-          CreateElement(data[i])            
-      } 
-  }  
-}
