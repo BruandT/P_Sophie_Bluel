@@ -7,17 +7,23 @@
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Work+Sans&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer">
 	<meta name="description" content="">
 	<link rel="stylesheet" href="./assets/style.css">	
 </head>
 <body>
+	<div id="editor">
+		<h3>Mode édition</h3>
+		<button>publier les changements</button>
+	</div>
 	<header>
 		<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
 		<nav>
 			<ul>
-				<li><a href="./index.html">projet</a></li>
+				<li><a href="">projet</a></li>
 				<li><a href="#contact"> contact</a></li>
-				<li> <a href="./login.html"> login</a></li>
+				<li id="log-in"><a href="./login.html"> login</a></li>
+				<li id="log-out"><a href="">logout</a></li>
 				<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
 			</ul>
 		</nav>
@@ -26,8 +32,11 @@
 		<section id="introduction">
 			<figure>
 				<img src="./assets/images/sophie-bluel.png" alt="">
+				<button class="edit" id="change-img-intro"><i class="fa-regular fa-pen-to-square"></i>modifier</button>
 			</figure>
+			
 			<article>
+				<button class="edit" id="change-h2-intro"><i class="fa-regular fa-pen-to-square"></i>modifier</button>
 				<h2>Designer d'espace</h2>
 				<p>Je raconte votre histoire, je valorise vos idées. Je vous accompagne de la conception à la livraison finale du chantier.</p>
 				<p>Chaque projet sera étudié en commun, de façon à mettre en valeur les volumes, les matières et les couleurs dans le respect de l’esprit des lieux et le choix adapté des matériaux. Le suivi du chantier sera assuré dans le souci du détail, le respect du planning et du budget.</p>
@@ -35,7 +44,10 @@
 			</article>
 		</section>
 		<section id="portfolio">
+			<div id="title-portfolio">
 			<h2>Mes Projets</h2>
+			<button class="edit" id="change-h2-portfolio"><i class="fa-regular fa-pen-to-square"></i>modifier</button>
+			</div>
 			<ul id="tri">
 				<li class="tri-option" id="all-li" data-categories="all">Tous</li>
 				<li id="object-li" data-categories="1">Objets</li>
