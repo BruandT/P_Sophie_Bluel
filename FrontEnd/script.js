@@ -15,8 +15,6 @@ function RecupData(data){
 }
 
 RecupData(data)
-console.log(data);
-
 
 function CreateElement(data){
 
@@ -54,16 +52,13 @@ liItem.forEach (li => {
     liItem.forEach(li => {
       li.className = "";
     })
-    li.className = "tri-option";
-    
+    li.className = "tri-option";    
     
     //Filtre
     const valueCategories = li.getAttribute('data-categories');
-    console.log(valueCategories);
     figureItem.forEach(figure => {
       figure.style.display = 'none'
       if (figure.getAttribute('data-category') == valueCategories || valueCategories == 'all') {
-        console.log(valueCategories);
         figure.style.display = 'block'
       }
     })
@@ -71,3 +66,32 @@ liItem.forEach (li => {
   
 })
 
+
+//connexion + editor
+const token = localStorage.getItem('token')
+const logOut = document.querySelector('#log-out')
+const logIn = document.querySelector('#log-in')
+const connexion = localStorage.getItem('connected')
+const editor = document.querySelector('#editor')
+const editButton = document.querySelectorAll('.edit')
+console.log(connexion);
+if(connexion === 'yes'){
+  logOut.style.display = "block";
+  logIn.style.display = "none";
+  editor.style.display = "flex";
+  editButton.forEach(button => button.style.display = "block");
+}else{
+  logOut.style.display = "none";
+  logIn.style.display = "block";
+  editor.style.display = "none";
+  editButton.forEach(button => button.style.display = "none");
+} 
+
+logOut.addEventListener('click', () =>{
+  localStorage.setItem("connected", "no")
+  localStorage.removeItem('token')
+  if (connexion === no) {
+    logOut.style.display = "none";
+    logIn.style.display = "block";    
+  }
+})
