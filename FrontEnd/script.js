@@ -119,7 +119,18 @@ inputImgIntro.addEventListener('change', () =>{
         inputImgIntro.style.display = "none"
       }
 })
-
+// titre + texte intro
+const buttonDescriptionIntro = document.querySelector('#change-description-intro');
+const divDescriptionIntro = document.querySelectorAll('.div-edit-article')
+buttonDescriptionIntro.addEventListener('click', () =>{
+    divDescriptionIntro.forEach(element => {
+        if (element.style.display == "flex") {
+            element.style.display = "none"
+        } else {  
+            element.style.display = "flex" 
+        }
+      });
+})
 
 
 
