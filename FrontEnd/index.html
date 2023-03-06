@@ -28,25 +28,88 @@
 			</ul>
 		</nav>
 	</header>
+	
 	<main>
 		<section id="introduction">
 			<figure>
-				<img src="./assets/images/sophie-bluel.png" alt="">
-				<button class="edit" id="change-img-intro"><i class="fa-regular fa-pen-to-square"></i>modifier</button>
+				<img id="img-intro" src="./assets/images/sophie-bluel.png" alt="">
+				<div><button class="edit" id="change-img-intro"><i class="fa-regular fa-pen-to-square"></i>modifier</button>
+				<input id="change-img-intro-input" type="file"></div>
 			</figure>
 			
 			<article>
-				<button class="edit" id="change-h2-intro"><i class="fa-regular fa-pen-to-square"></i>modifier</button>
-				<h2>Designer d'espace</h2>
-				<p>Je raconte votre histoire, je valorise vos idées. Je vous accompagne de la conception à la livraison finale du chantier.</p>
-				<p>Chaque projet sera étudié en commun, de façon à mettre en valeur les volumes, les matières et les couleurs dans le respect de l’esprit des lieux et le choix adapté des matériaux. Le suivi du chantier sera assuré dans le souci du détail, le respect du planning et du budget.</p>
-				<p>En cas de besoin, une équipe pluridisciplinaire peut-être constituée : architecte DPLG, décorateur(trice)</p>
+				<button class="edit" id="change-description-intro"><i class="fa-regular fa-pen-to-square"></i>modifier</button>
+				<div class="div-edit-article"><label for="change-h2-intro"><span id="span-h2-intro">30</span> caracteres restant.</label><input id="change-h2-intro"  type="text" maxlength="30"></div>				
+				<h2 id="h2-intro">Designer d'espace</h2>
+				<div class="div-edit-article"><label for="change-p1-intro"><span id="span-p1-intro">300</span> caracteres restant.</label><input id="change-p1-intro" type="text" maxlength="300"></div>				
+				<p id="p1-intro">Je raconte votre histoire, je valorise vos idées. Je vous accompagne de la conception à la livraison finale du chantier.</p>
+				<div class="div-edit-article"><label for="change-p2-intro"><span id="span-p2-intro">300</span> caracteres restant.</label><input id="change-p2-intro" type="text" maxlength="300"></div>				
+				<p id="p2-intro">Chaque projet sera étudié en commun, de façon à mettre en valeur les volumes, les matières et les couleurs dans le respect de l’esprit des lieux et le choix adapté des matériaux. Le suivi du chantier sera assuré dans le souci du détail, le respect du planning et du budget.</p>
+				<div class="div-edit-article"><label for="change-p3-intro"><span id="span-p3-intro">300</span> caracteres restant.</label><input id="change-p3-intro" type="text" maxlength="300"></div>
+				<p id="p3-intro">En cas de besoin, une équipe pluridisciplinaire peut-être constituée : architecte DPLG, décorateur(trice)</p>
 			</article>
 		</section>
+		<aside class="modal" id="gallery-modal" aria-hidden="true" role="dialog">
+			<div class="modal-wrapper">
+				<button id="close-gallery-modal"><i class="fa-solid fa-xmark"></i></button>
+				<h3>Galerie photo</h3>				
+				<div id="gallery-main">
+					<div class="gallery-card"><img src="assets/images/abajour-tahina.png" alt=""><button class="button-edit-img-modal">éditer</button><i class="fa-solid fa-trash-can"></i></div>
+					<div class="gallery-card"><img src="assets/images/abajour-tahina.png" alt=""><button class="button-edit-img-modal">éditer</button><i class="fa-solid fa-trash-can"></i></div>
+					<div class="gallery-card"><img src="assets/images/abajour-tahina.png" alt=""><button class="button-edit-img-modal">éditer</button><i class="fa-solid fa-trash-can"></i></div>
+					<div class="gallery-card"><img src="assets/images/abajour-tahina.png" alt=""><button class="button-edit-img-modal">éditer</button><i class="fa-solid fa-trash-can"></i></div>
+					<div class="gallery-card"><img src="assets/images/abajour-tahina.png" alt=""><button class="button-edit-img-modal">éditer</button><i class="fa-solid fa-trash-can"></i></div>
+					<div class="gallery-card"><img src="assets/images/abajour-tahina.png" alt=""><button class="button-edit-img-modal">éditer</button><i class="fa-solid fa-trash-can"></i></div>
+					<div class="gallery-card"><img src="assets/images/abajour-tahina.png" alt=""><button class="button-edit-img-modal">éditer</button><i class="fa-solid fa-trash-can"></i></div>
+					<div class="gallery-card"><img src="assets/images/abajour-tahina.png" alt=""><button class="button-edit-img-modal">éditer</button><i class="fa-solid fa-trash-can"></i></div>
+					<div class="gallery-card"><img src="assets/images/abajour-tahina.png" alt=""><button class="button-edit-img-modal">éditer</button><i class="fa-solid fa-trash-can"></i></div>
+					<div class="gallery-card"><img src="assets/images/abajour-tahina.png" alt=""><button class="button-edit-img-modal">éditer</button><i class="fa-solid fa-trash-can"></i></div>
+					<div class="gallery-card"><img src="assets/images/abajour-tahina.png" alt=""><button class="button-edit-img-modal">éditer</button><i class="fa-solid fa-trash-can"></i></div>
+				</div>
+				<hr>
+				<div id="button-modal">
+					<button id="open-picture-modal">Ajouter une photo</button>
+					<button id="delete-gallery">Supprimer la galerie</button>			
+				</div>	
+				
+			</div>		
+		</aside>
+		<aside class="modal" id="picture-modal" aria-hidden="true" role="dialog">
+			<div class="modal-wrapper" id="add-picture">
+				<button id="close-picture-modal" class="close-modal"><i class="fa-solid fa-xmark"></i></button>
+				<button id="back-to-modal"><i class="fa-solid fa-arrow-left-long"></i></button>
+				<h3>Ajout photo</h3>
+				<div id="picture-add-card">
+					<i class="fa-solid fa-image"></i>
+					<div class="custome-file">
+						<span>
+							+ Ajouter photo
+						</span>
+						<input type="file" accept=".png, .jpg">
+					</div>
+					
+					<p>jpg, png : 4mo max</p>
+				</div>
+				<div class="div-input-picture"><label for="picture-title">Titre</label>
+					<input type="text" id="picture-title">
+				</div>				
+				<div class="div-input-picture"><label for="categories-picture">Catégorie</label>
+					<select id="categories-picture">
+						<option value=""></option>
+						<option value="1">Objets</option>
+						<option value="2">Appartements</option>
+						<option value="3">Hôtels & restaurants</option>
+					</select>
+				</div>				
+				<hr>
+				<button id="valid-add-picture">Valider</button>				
+			</div>
+			
+		</aside>
 		<section id="portfolio">
 			<div id="title-portfolio">
 			<h2>Mes Projets</h2>
-			<button class="edit" id="change-h2-portfolio"><i class="fa-regular fa-pen-to-square"></i>modifier</button>
+			<button class="edit" id="change-h2-portfolio"><a href="#modal" id="open-modal"><i class="fa-regular fa-pen-to-square"></i>modifier</a></button>
 			</div>
 			<ul id="tri">
 				<li class="tri-option" id="all-li" data-categories="all">Tous</li>
