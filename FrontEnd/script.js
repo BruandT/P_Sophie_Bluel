@@ -131,7 +131,26 @@ buttonDescriptionIntro.addEventListener('click', () =>{
         }
       });
 })
+// fonction edit la partie intro + compteur de caractere
+function countInputLength(inputSelector, maxLengthAttr, outputSelector, textChanged) {
+  const inputEl = document.querySelector(inputSelector);
+  const outputEl = document.querySelector(outputSelector);
+  const maxLength = inputEl.getAttribute(maxLengthAttr);
+  const changeEl = document.querySelector(textChanged);
 
+  inputEl.addEventListener('input', (event) => {
+    const valueLength = event.target.value.length;
+    const leftCharLength = maxLength - valueLength;
+    changeEl.innerHTML = inputEl.value
+    if (leftCharLength < 0) return;
+    outputEl.innerText = leftCharLength;
+  });
+}
+// chaque element d'intro
+countInputLength('#change-h2-intro', 'maxlength', '#span-h2-intro', '#h2-intro');
+countInputLength('#change-p1-intro', 'maxlength', '#span-p1-intro', '#p1-intro');
+countInputLength('#change-p2-intro', 'maxlength', '#span-p2-intro', '#p2-intro');
+countInputLength('#change-p3-intro', 'maxlength', '#span-p3-intro', '#p3-intro');
 
 
 logOut.addEventListener('click', () =>{
