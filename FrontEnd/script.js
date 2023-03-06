@@ -89,6 +89,40 @@ if(connexion === 'yes'){
   editButton.forEach(button => button.style.display = "none");
 } 
 
+// edit image intro
+const imgIntro = document.querySelector('#img-intro');
+const buttonImgIntro = document.querySelector('#change-img-intro');
+const inputImgIntro = document.querySelector("#change-img-intro-input");
+
+buttonImgIntro.addEventListener('click', () => {
+  
+  if (inputImgIntro.style.display === "block") {
+    inputImgIntro.style.display = "none"
+} else {  
+    inputImgIntro.style.display = "block" 
+}
+})
+inputImgIntro.addEventListener('change', () =>{
+    if (inputImgIntro.files && inputImgIntro.files[0]) {
+        // objet FileReader
+        const reader = new FileReader();
+
+        // fonction de rappel de chargement du lecteur
+        reader.onload = function(e) {
+          // source de l'image sur l'URL de données chargée
+          imgIntro.src = e.target.result;
+          localStorage.setItem("imgIntro", e.target.result)
+        };
+    
+        // fichier en tant qu'URL de données
+        reader.readAsDataURL(inputImgIntro.files[0]);        
+        inputImgIntro.style.display = "none"
+      }
+})
+
+
+
+
 logOut.addEventListener('click', () =>{
   localStorage.setItem("connected", "no")
   localStorage.removeItem('token')
