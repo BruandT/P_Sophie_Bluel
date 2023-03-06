@@ -153,6 +153,21 @@ countInputLength('#change-p2-intro', 'maxlength', '#span-p2-intro', '#p2-intro')
 countInputLength('#change-p3-intro', 'maxlength', '#span-p3-intro', '#p3-intro');
 
 
+const imgIntroStock= localStorage.getItem("imgIntroStock");
+// bouton publier changement
+const buttonEditor = document.querySelector('#editor button')
+buttonEditor.addEventListener('click', () =>{
+    const imgIntroLocalStorage= localStorage.getItem("imgIntro");
+    if (imgIntroLocalStorage) {
+        localStorage.setItem("imgIntroStock", imgIntroLocalStorage)
+    }
+})
+
+if (imgIntroStock) {        
+    imgIntro.src = imgIntroStock
+}
+
+
 logOut.addEventListener('click', () =>{
   localStorage.setItem("connected", "no")
   localStorage.removeItem('token')
