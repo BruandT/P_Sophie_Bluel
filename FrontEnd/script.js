@@ -168,9 +168,11 @@ if (imgIntroStock) {
 }
 
 
+// bouton logOut
 logOut.addEventListener('click', () =>{
-  localStorage.setItem("connected", "no")
+  localStorage.removeItem('connected')
   localStorage.removeItem('token')
+  localStorage.removeItem('imgIntro')
   if (connexion === no) {
     logOut.style.display = "none";
     logIn.style.display = "block";    
