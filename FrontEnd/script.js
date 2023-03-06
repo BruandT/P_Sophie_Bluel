@@ -1,70 +1,72 @@
-// Récupération des pièces depuis le fichier JSON
-const reponse = await fetch('http://localhost:5678/api/works');
-const data = await reponse.json();
+
+const url = 'http://localhost:5678/api';
+const urlWorks = `${url}/works`
 const imagesContainer = document.querySelector('.gallery')
 
-ResetGallery()
+resetGallery()
 
-function RecupData(data){
-    
-    for(let i = 0; i < data.length; i++){
-      
-      CreateElement(data[i])
-       
-    }
+
+function getData(urlWorks){
+    fetch(urlWorks)
+    .then(response => {
+        if (response.ok) {
+            return response.json()            
+        }
+    })
+    .then(function(data){
+        for (let i = 0; i < data.length; i++) {
+            createElement(data[i])              
+        }
+        
+        const liItem = document.querySelectorAll('#tri li');
+        const figureItem = document.querySelectorAll('.gallery figure');
+        //Partie filtre
+        liItem.forEach (li => {
+            li.onclick = function(){    
+                //changement de class pour le clique (changement de style)
+                liItem.forEach(li => {
+                    li.className = "";
+                })
+                li.className = "tri-option";          
+                
+                //Filtre
+                const valueCategories = li.getAttribute('data-categories');
+                figureItem.forEach(figure => {
+                    figure.style.display = 'none'
+                    if (figure.getAttribute('data-category') == valueCategories || valueCategories == 'all') {
+                        figure.style.display = 'block'
+                    }
+                })
+            }    
+        })
+        
+    })
 }
 
-RecupData(data)
+getData(urlWorks);
 
-function CreateElement(data){
-
+function createElement(user){
     //creation des differents elements
     const figure = document.createElement('figure')
     const figureCaption = document.createElement('figcaption')
     const figureImage = document.createElement('img')
-
+    
     //ajout des valeurs de l'objet 
-    figureImage.src = data.imageUrl
-    figureImage.alt = data.title 
-    figureCaption.innerHTML = data.title 
-    figure.setAttribute('data-category', data.categoryId)
-
+    figureImage.src = user.imageUrl
+    figureImage.alt = user.title 
+    figureCaption.innerHTML = user.title 
+    figure.setAttribute('data-category', user.categoryId)
+    
     //liaison des enfants et des parents
     imagesContainer.appendChild(figure)
     figure.appendChild(figureImage)
     figure.appendChild(figureCaption)
-    
 }
 
-function ResetGallery(){
+function resetGallery(){
     //Reset la classe gallery
     document.querySelector('.gallery').innerHTML = " ";
 }
-  
-
-
-//Partie filtre
-const liItem = document.querySelectorAll('#tri li');
-const figureItem = document.querySelectorAll('.gallery figure');
-liItem.forEach (li => {
-  li.onclick = function(){
-    //changement de class pour le clique (changement de style)
-    liItem.forEach(li => {
-      li.className = "";
-    })
-    li.className = "tri-option";    
-    
-    //Filtre
-    const valueCategories = li.getAttribute('data-categories');
-    figureItem.forEach(figure => {
-      figure.style.display = 'none'
-      if (figure.getAttribute('data-category') == valueCategories || valueCategories == 'all') {
-        figure.style.display = 'block'
-      }
-    })
-  }
-  
-})
 
 
 //connexion + editor
