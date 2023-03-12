@@ -10,7 +10,6 @@ const url = "http://localhost:5678/api/users/login";
 
 document.querySelector("form").addEventListener("submit", (event) => {
   const data = { email: email.value, password: password.value };
-  console.log(data)
   if (!email.checkValidity() && !emailRegex.test(email.value)) {
     alert("Veuillez entrer une adresse e-mail valide");
     event.preventDefault();
@@ -28,8 +27,7 @@ document.querySelector("form").addEventListener("submit", (event) => {
   })
   .then(response => response.json())
   .then(data => {
-    localStorage.setItem('token', JSON.stringify(data.token))
-    localStorage.setItem("connected", "yes")  
+    localStorage.setItem("token", data.token)
     window.location.href = "index.html";
   })
   .catch(error => console.error(error));
