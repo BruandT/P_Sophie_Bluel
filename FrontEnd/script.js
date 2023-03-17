@@ -22,16 +22,16 @@ function getData(urlWorks){
         
         const liItem = document.querySelectorAll('#tri li');
         const figureItem = document.querySelectorAll('.gallery figure');
-        //Partie filtre
+        // partie filtre
         liItem.forEach (li => {
             li.onclick = function(){    
-                //changement de class pour le clique (changement de style)
+                // changement de class pour le clique (changement de style)
                 liItem.forEach(li => {
                     li.className = "";
                 })
                 li.className = "tri-option";          
                 
-                //Filtre
+                // filtre
                 const valueCategories = li.getAttribute('data-categories');
                 figureItem.forEach(figure => {
                     figure.style.display = 'none';
@@ -46,27 +46,27 @@ function getData(urlWorks){
 }
 
 getData(urlWorks);
-// Element de gallery
+// element de gallery
 function createElement(data){
-    //creation des differents elements
+    // creation des differents elements
     const figure = document.createElement('figure');
     const figureCaption = document.createElement('figcaption');
     const figureImage = document.createElement('img');
     
-    //ajout des valeurs de l'objet 
+    // ajout des valeurs de l'objet 
     figureImage.src = data.imageUrl;
     figureImage.alt = data.title;
     figureCaption.innerHTML = data.title;
     figure.setAttribute('data-category', data.categoryId);
     
-    //liaison des enfants et des parents
+    // liaison des enfants et des parents
     imagesContainer.appendChild(figure);
     figure.appendChild(figureImage);
     figure.appendChild(figureCaption);
 }
 
 function resetGallery(){
-    //Reset la classe gallery
+    // reset la classe gallery
     document.querySelector('.gallery').innerHTML = " ";
     document.querySelector('#gallery-main').innerHTML = " ";
 }
@@ -157,13 +157,18 @@ countInputLength('#change-p3-intro', 'maxlength', '#span-p3-intro', '#p3-intro')
 // ajout de photo dans la modal
 const inputPicture = document.getElementById("picture");
 const cardPicture = document.getElementById("before-add");
-const imgInput = document.getElementById("img-input");
+const divPicture = document.getElementById("picture-add-card");
+
 // ajouter un écouteur d'événement sur l'élément input
 inputPicture.addEventListener("change", function() {
     // récupérer le fichier sélectionné
     const file = inputPicture.files[0];
     // vérifier que le fichier est une image
     if (file.type.startsWith("image/") && (file.type === "image/jpeg" || file.type === "image/png")) {
+        // creer un element img
+        let imgInput = document.createElement('img');
+        imgInput.setAttribute("id", "img-input")
+        divPicture.appendChild(imgInput)
         // créer un objet URL pour afficher l'image
         const imageUrl = URL.createObjectURL(file);    
         // remplacer le contenu de la div avec l'image        
@@ -196,6 +201,7 @@ function closeModal(close, modal){
     let closeModal = document.querySelector(close);
     let modalDisplay = document.querySelector(modal);
     closeModal.addEventListener('click', ()=>{
+        let imgInput = document.getElementById("img-input");
         modalDisplay.style.display = "none";
         cardPicture.style.display = "flex" 
         imgInput.style.display = "none";
@@ -206,7 +212,7 @@ closeModal('#close-gallery-modal', '#gallery-modal');
 closeModal('#close-picture-modal', '#picture-modal');
 
 
-// Element de modal gallery
+// element de modal gallery
 function createElementModal(data){
     //creation des differents elements
     const divCard = document.createElement('div');
@@ -215,13 +221,13 @@ function createElementModal(data){
     const deleteDivCard = document.createElement('i');
     const moveDivCard = document.createElement('i');
     
-    //ajout des valeurs de l'objet 
+    // ajout des valeurs de l'objet 
     divImage.src = data.imageUrl;
     buttonEditCard.innerHTML = "éditer";
     divCard.setAttribute('data-category', data.categoryId);
     divCard.setAttribute('data-id', data.id);
     
-    //ajout des classes aux elements
+    // ajout des classes aux elements
     divCard.className = 'gallery-card';
     buttonEditCard.className = 'button-edit-img-modal';
     deleteDivCard.className = 'fa-trash-can';
@@ -229,7 +235,7 @@ function createElementModal(data){
     moveDivCard.className = 'fa-arrows-up-down-left-right';
     moveDivCard.classList.add('fa-solid', 'fa-arrows-up-down-left-right');
     
-    //liaison des enfants et des parents
+    // liaison des enfants et des parents
     galleryModal.appendChild(divCard);
     divCard.appendChild(divImage);
     divCard.appendChild(buttonEditCard);
@@ -273,7 +279,7 @@ const deleteAll = () => {
     });
   };
 
-//formulaire d'envoi
+// formulaire d'envoi
 const form = document.getElementById("myForm");
 
 // event verification des champs
@@ -337,12 +343,14 @@ if (imgIntroStock) {
 }
 
 // back to modal projet
+
 const backToProject = document.querySelector("#back-to-modal");
-backToProject.addEventListener('click', ()=>{
+backToProject.addEventListener('click', ()=>{  
+    let imgInput = document.getElementById("img-input");  
     modalPicture.style.display = "none";
     modalProjet.style.display = "flex";
     cardPicture.style.display = "flex";
-    imgInput.style.display = "none";
+    imgInput.remove();
     inputPicture.value = "";
     
 })
