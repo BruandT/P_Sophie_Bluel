@@ -49,7 +49,7 @@
 					<p id="p3-intro">En cas de besoin, une équipe pluridisciplinaire peut-être constituée : architecte DPLG, décorateur(trice)</p>
 				</article>
 			</section>
-			<aside class="modal" id="gallery-modal" aria-hidden="true" role="dialog">
+			<aside class="modal" id="gallery-modal" aria-hidden="true">
 				<div class="modal-wrapper">
 					<button id="close-gallery-modal"><i class="fa-solid fa-xmark"></i></button>
 					<h3>Galerie photo</h3>				
@@ -64,21 +64,20 @@
 					
 				</div>		
 			</aside>
-			<aside class="modal" id="picture-modal" aria-hidden="true" role="dialog">
+			<aside class="modal" id="picture-modal" aria-hidden="true">
 				<div class="modal-wrapper" id="add-picture">
 					<button id="close-picture-modal" class="close-modal"><i class="fa-solid fa-xmark"></i></button>
 					<button id="back-to-modal"><i class="fa-solid fa-arrow-left-long"></i></button>
 					<h3>Ajout photo</h3>
-					<form action="" id="myForm">
+					<form id="myForm">
 						<div id="picture-add-card">
-							<img id="img-input" src="" alt="">
 							<div id="before-add">
 								<i class="fa-solid fa-image"></i>
 								<div class="custome-file">
 									<span>
 										+ Ajouter photo
 									</span>
-									<input id="picture" type="file" name="image" accept=".png, .jpg" maxlength="4194304">
+									<input id="picture" type="file" name="image" accept=".png, .jpg" size="4194304">
 								</div>
 								
 								<p>jpg, png : 4mo max</p>
@@ -90,7 +89,6 @@
 						</div>				
 						<div class="div-input-picture"><label for="categories-picture">Catégorie</label>
 							<select id="categories-picture" name="category">
-								<option value=""></option>
 								<option value="1">Objets</option>
 								<option value="2">Appartements</option>
 								<option value="3">Hôtels & restaurants</option>
@@ -106,7 +104,7 @@
 			<section id="portfolio">
 				<div id="title-portfolio">
 					<h2>Mes Projets</h2>
-					<button class="edit" id="change-portfolio"><a href="#picture-modal" id="open-modal"><i class="fa-regular fa-pen-to-square"></i>modifier</a></button>
+					<button class="edit" id="change-portfolio"><i class="fa-regular fa-pen-to-square"></i>modifier</button>
 				</div>
 				<ul id="tri">
 					<li class="tri-option" id="all-li" data-categories="all">Tous</li>
@@ -164,7 +162,7 @@
 			<section id="contact">
 				<h2>Contact</h2>
 				<p>Vous avez un projet ? Discutons-en !</p>
-				<form action="#" method="post">
+				<form method="post">
 					<label for="name">Nom</label>
 					<input type="text" name="name" id="name">
 					<label for="email">Email</label>
