@@ -143,7 +143,7 @@ footer nav ul {
 	width: 379px;
 	height: 50px;
 }
-#login form input[type="submit"]{
+#valid{
     width: 180px;
     height: 36px;
 	font-family: 'Syne';
@@ -151,7 +151,8 @@ footer nav ul {
 	color: white;
 	background-color: #1D6154;
 	margin : 2em auto ;
-	
+	border: none;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 	text-align: center;
 	border-radius: 60px ;
 }
