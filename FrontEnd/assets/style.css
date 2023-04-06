@@ -170,16 +170,17 @@ nav li a {
 	background-color: #1D6154;
 }
 .gallery {
-	width: 100%;
+	width: 80%;
 	display: grid;
+	margin-left: 57px;
 	grid-template-columns: 1fr 1fr 1fr;
 	grid-column-gap: 20px;
 	grid-row-gap: 20px;
 }
 .gallery img {
-	width: 100%;
+	width: 310px;
 	height: 405px;
-	object-fit: contain;
+	object-fit: cover;
 }
 .gallery figcaption{
 	margin-top: 5px;
@@ -370,13 +371,16 @@ footer nav ul {
 }
 #gallery-main{
 	width: 450px;
-	height: 390px;
 	margin-top: 45px;
 	margin-bottom: 35px;
 	display: flex;
 	flex-flow: row wrap;
 	column-gap: 8px;
+	row-gap: 0;
 	overflow: auto;
+}
+#contain-gallery{
+	height: 470px;
 }
 #gallery-main img {
 	width: 78px;
@@ -557,11 +561,15 @@ hr{
 	line-height: 12px;
 	color: #444444;
 }
+.info-manquante{
+	color: red;
+	margin-top: 5px;
+}
+
 .div-input-picture{
 	width: 420px;
 	display: flex;
 	flex-direction: column;
-	margin-top: 30px;
 	gap: 10px;
 }
 .div-input-picture label{
