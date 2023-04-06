@@ -52,10 +52,12 @@
 			<aside class="modal" id="gallery-modal" aria-hidden="true">
 				<div class="modal-wrapper">
 					<button id="close-gallery-modal"><i class="fa-solid fa-xmark"></i></button>
-					<h3>Galerie photo</h3>				
+					<h3>Galerie photo</h3>	
+					<div id="contain-gallery">		
 					<div id="gallery-main">
 						<div class="gallery-card"><img src="assets/images/abajour-tahina.png" alt=""><i class="fa-solid fa-arrows-up-down-left-right"></i><button class="button-edit-img-modal">éditer</button><i class="fa-solid fa-trash-can"></i></div>
 					</div>
+					</div>	
 					<hr>
 					<div id="button-modal">
 						<button id="open-picture-modal">Ajouter une photo</button>
@@ -69,7 +71,7 @@
 					<button id="close-picture-modal" class="close-modal"><i class="fa-solid fa-xmark"></i></button>
 					<button id="back-to-modal"><i class="fa-solid fa-arrow-left-long"></i></button>
 					<h3>Ajout photo</h3>
-					<form id="myForm">
+					<form id="myForm" method="post">
 						<div id="picture-add-card">
 							<div id="before-add">
 								<i class="fa-solid fa-image"></i>
@@ -83,10 +85,13 @@
 								<p>jpg, png : 4mo max</p>
 							</div>
 							
+							
 						</div>
+						<p id="info-img" class="info-manquante">Information manquante</p>
 						<div class="div-input-picture"><label for="picture-title">Titre</label>
 							<input type="text" id="picture-title" name="title" maxlength="30">
-						</div>				
+						</div>	
+						<p id="info-title" class="info-manquante">Information manquante</p>			
 						<div class="div-input-picture"><label for="categories-picture">Catégorie</label>
 							<select id="categories-picture" name="category">
 								<option value="1">Objets</option>
@@ -94,8 +99,10 @@
 								<option value="3">Hôtels & restaurants</option>
 							</select>
 						</div>	
+						<p id="info-select" class="info-manquante">Information manquante</p>
 						<hr>
-						<button type="submit" id="valid-add-picture">Valider</button>		
+
+						<button type="submit" id="valid-add-picture" disabled>Valider</button>		
 					</form>			
 					
 				</div>
