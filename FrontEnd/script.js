@@ -1,4 +1,3 @@
-
 const url = 'http://localhost:5678/api';
 const urlWorks = `${url}/works`;
 const imagesContainer = document.querySelector('.gallery');
@@ -7,8 +6,8 @@ const galleryModal = document.querySelector('#gallery-main');
 resetGallery();
 
 
-function getData(urlWorks){
-    fetch(urlWorks)
+async function getData(urlWorks){
+    await fetch(urlWorks)
     .then(response => {
         if (response.ok) {
             return response.json()            
@@ -46,6 +45,7 @@ function getData(urlWorks){
 }
 
 getData(urlWorks);
+
 // element de gallery
 function createElement(data){
     // creation des differents elements
@@ -58,6 +58,7 @@ function createElement(data){
     figureImage.alt = data.title;
     figureCaption.innerHTML = data.title;
     figure.setAttribute('data-category', data.categoryId);
+    figure.setAttribute('id', data.id);
     
     // liaison des enfants et des parents
     imagesContainer.appendChild(figure);
@@ -160,7 +161,8 @@ const cardPicture = document.getElementById("before-add");
 const divPicture = document.getElementById("picture-add-card");
 
 // ajouter un écouteur d'événement sur l'élément input
-inputPicture.addEventListener("change", function() {
+inputPicture.addEventListener("change", function(event) {
+    event.preventDefault()
     // récupérer le fichier sélectionné
     const file = inputPicture.files[0];
     // vérifier que le fichier est une image
@@ -245,31 +247,33 @@ function createElementModal(data){
     // ajout de l'écouteur d'événements sur l'icône de poubelle
     deleteDivCard.addEventListener('click', (e) =>{
         e.preventDefault();
-        let dltImg = data.id;
-        deleteImage(dltImg);
+        deleteImage(data.id);
+        document.querySelector(`[data-id="${data.id}"]`).remove()
+        document.querySelector(`[id="${data.id}"]`).remove()      
     })
     
 } 
 
+
 // fonction delete image
-async function deleteImage(id) {
-    document.querySelector(`[data-id="${id}"]`).remove();
-    
+async function deleteImage(id) {        
     await fetch(`http://localhost:5678/api/works/${id}`, {
     method: "DELETE",
     headers: {
         Accept: "*/*",
         Authorization: "Bearer " + token,
     },
-})
+})  
 .catch((error) => {
     console.error("Error:", error);
 });
 }
+
 // tout supprimer gallery
 const deleteModalGallery = document.querySelector("#delete-gallery");
 const modalGallery = document.querySelector("#gallery-main");
-deleteModalGallery.addEventListener('click', ()=>{
+deleteModalGallery.addEventListener('click', (e)=>{
+    e.preventDefault();
     deleteAll();
 })
 const deleteAll = () => {
@@ -282,26 +286,45 @@ const deleteAll = () => {
 // formulaire d'envoi
 const form = document.getElementById("myForm");
 
-// event verification des champs
-form.addEventListener("change", checkItems);
 // fonction verification des champs
+const colorValid = document.querySelector("#valid-add-picture");
 function checkItems(e) {
     e.preventDefault();
     const imageAdd = document.getElementById("picture").files;
     const title = document.getElementById("picture-title").value;
-    const category = document.getElementById("categories-picture").value;
-    const colorValid = document.querySelector("#valid-add-picture");
-    if (imageAdd.length != 0 && title != "" && category != "") {
-        colorValid.style.backgroundColor = "#1D6154";
-    } else {
+    const category = document.getElementById("categories-picture").value;   
+    const infoTitle = document.getElementById("info-title");
+    const infoImg = document.getElementById("info-img");
+    const infoSelect = document.getElementById("info-select");
+    if (title != "") {
+       infoTitle.style.visibility = "hidden";
+    }else{
+        infoTitle.style.visibility = "visible";
+    }
+    if (imageAdd.length != 0) {
+        infoImg.style.visibility = "hidden";
+    }else{
+        infoImg.style.visibility = "visible";
+    }
+    if (category != "") {
+        infoSelect.style.visibility = "hidden";
+    }else{
+        infoSelect.style.visibility = "visible";
+    }
+    if (title != "" && imageAdd.length != 0 && category != "") {
+        colorValid.style.backgroundColor = "#1D6154"; 
+        colorValid.disabled = false;
+    }
+    else {
         colorValid.style.backgroundColor = "#a7a7a7";
+        colorValid.disabled = true;        
     }
 }
+// event verification des champs
+form.addEventListener("change", checkItems);
 
 // event recuperation des champs + envoi
-form.addEventListener("submit", submitForm);
-// fonction recuperation des champs + envoi
-async function submitForm(e){
+form.addEventListener("submit", async(e) => {
     e.preventDefault(); 
     const title = document.getElementById("picture-title");
     const category = document.getElementById("categories-picture");
@@ -317,15 +340,10 @@ async function submitForm(e){
         headers: {Accept: "application/json",
         Authorization: "Bearer " + token,
     },
-    body: formData,
+    body: formData
 })
-.then(response => response.json())
-.then(data => console.log(data))
 .catch(error => console.error("Error:", error));
-}
-
-
-
+});
 
 // stockage image lors du click sur les bouton publier changement (Feature non demandé dans le projet)
 const imgIntroStock= localStorage.getItem("imgIntroStock");
@@ -351,7 +369,7 @@ backToProject.addEventListener('click', ()=>{
     modalProjet.style.display = "flex";
     cardPicture.style.display = "flex";
     imgInput.remove();
-    inputPicture.value = "";
+    inputPicture.value = "";    
     
 })
 // bouton logOut
