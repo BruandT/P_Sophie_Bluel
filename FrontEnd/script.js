@@ -65,95 +65,83 @@ function createElement(data){
     figure.appendChild(figureImage);
     figure.appendChild(figureCaption);
 }
+// element de modal gallery
+function createElementModal(data){
+    //creation des differents elements
+    const divCard = document.createElement('div');
+    const buttonEditCard = document.createElement('button');
+    const divImage = document.createElement('img');
+    const deleteDivCard = document.createElement('i');
+    const moveDivCard = document.createElement('i');
+    
+    // ajout des valeurs de l'objet 
+    divImage.src = data.imageUrl;
+    buttonEditCard.innerHTML = "éditer";
+    divCard.setAttribute('data-category', data.categoryId);
+    divCard.setAttribute('data-id', data.id);
+    
+    // ajout des classes aux elements
+    divCard.className = 'gallery-card';
+    buttonEditCard.className = 'button-edit-img-modal';
+    deleteDivCard.className = 'fa-trash-can';
+    deleteDivCard.classList.add('fas', 'fa-trash-alt');
+    moveDivCard.className = 'fa-arrows-up-down-left-right';
+    moveDivCard.classList.add('fa-solid', 'fa-arrows-up-down-left-right');
+    
+    // liaison des enfants et des parents
+    galleryModal.appendChild(divCard);
+    divCard.appendChild(divImage);
+    divCard.appendChild(buttonEditCard);
+    divCard.appendChild(deleteDivCard);
+    divCard.appendChild(moveDivCard);
+
+
+    // ajout de l'écouteur d'événements sur l'icône de poubelle
+    deleteDivCard.addEventListener('click', (e) =>{
+        e.preventDefault();         
+        deleteImage(data.id);
+    })
+    
+
+    
+} 
+// fonction delete image
+async function deleteImage(id) {        
+    await fetch(`http://localhost:5678/api/works/${id}`, {
+    method: "DELETE",
+    headers: {
+        Accept: "*/*",
+        Authorization: "Bearer " + token,
+    },
+})
+.then(response => {
+    if (response.ok) {
+        document.querySelector(`[data-id="${id}"]`).remove()
+        document.querySelector(`[id="${id}"]`).remove()  
+    }
+})
+    .catch((error) => {
+        console.error("Error:", error);
+    });
+}
 
 function resetGallery(){
     // reset la classe gallery
     document.querySelector('.gallery').innerHTML = " ";
     document.querySelector('#gallery-main').innerHTML = " ";
 }
-
-
-//connexion + editor
-const token = localStorage.getItem('token');
-const logOut = document.querySelector('#log-out');
-const logIn = document.querySelector('#log-in');
-const editor = document.querySelector('#editor');
-const editButton = document.querySelectorAll('.edit');
-if(token){
-    logOut.style.display = "block";
-    logIn.style.display = "none";
-    editor.style.display = "flex";
-    editButton.forEach(button => button.style.display = "block");
-}else{
-    logOut.style.display = "none";
-    logIn.style.display = "block";
-    editor.style.display = "none";
-    editButton.forEach(button => button.style.display = "none");
-} 
-
-// edit image intro (Feature non demandé dans le projet)
-const imgIntro = document.querySelector('#img-intro');
-const buttonImgIntro = document.querySelector('#change-img-intro');
-const inputImgIntro = document.querySelector("#change-img-intro-input");
-
-buttonImgIntro.addEventListener('click', () => {
-    
-    if (inputImgIntro.style.display === "block") {
-        inputImgIntro.style.display = "none";
-    } else {  
-        inputImgIntro.style.display = "block"; 
-    }
-})
-inputImgIntro.addEventListener('change', () =>{
-    if (inputImgIntro.files && inputImgIntro.files[0]) {
-        // objet FileReader
-        const reader = new FileReader();
-        
-        // fonction de rappel de chargement du lecteur
-        reader.onload = function(e) {
-            // source de l'image sur l'URL de données chargée
-            imgIntro.src = e.target.result;
-            localStorage.setItem("imgIntro", e.target.result);
-        };
-        
-        // fichier en tant qu'URL de données
-        reader.readAsDataURL(inputImgIntro.files[0]);        
-        inputImgIntro.style.display = "none";
-    }
-})
-
-// titre + texte intro (Feature non demandé dans le projet)
-const buttonDescriptionIntro = document.querySelector('#change-description-intro');
-const divDescriptionIntro = document.querySelectorAll('.div-edit-article');
-buttonDescriptionIntro.addEventListener('click', () =>{
-    divDescriptionIntro.forEach(element => {
-        if (element.style.display == "flex") {
-            element.style.display = "none";
-        } else {  
-            element.style.display = "flex";
-        }
-    });
-})
-// fonction edit la partie intro + compteur de caractere (Feature non demandé dans le projet)
-function countInputLength(inputSelector, maxLengthAttr, outputSelector, textChanged) {
-    const inputEl = document.querySelector(inputSelector);
-    const outputEl = document.querySelector(outputSelector);
-    const maxLength = inputEl.getAttribute(maxLengthAttr);
-    const changeEl = document.querySelector(textChanged);
-    
-    inputEl.addEventListener('input', (event) => {
-        const valueLength = event.target.value.length;
-        const leftCharLength = maxLength - valueLength;
-        changeEl.innerHTML = inputEl.value;
-        if (leftCharLength < 0) return;
-        outputEl.innerText = leftCharLength;
-    });
+// clear modal
+function clearModal(){
+    const infoTitle = document.getElementById("info-title");
+    const infoImg = document.getElementById("info-img");
+    const infoSelect = document.getElementById("info-select");
+    infoTitle.style.visibility = "visible";
+    infoImg.style.visibility = "visible";
+    infoSelect.style.visibility = "visible";
+    inputPicture.value = "";
+    document.querySelector("#img-input").remove() 
+    document.getElementById("picture-title").value ="";
 }
-// chaque element d'intro (Feature non demandé dans le projet)
-countInputLength('#change-h2-intro', 'maxlength', '#span-h2-intro', '#h2-intro');
-countInputLength('#change-p1-intro', 'maxlength', '#span-p1-intro', '#p1-intro');
-countInputLength('#change-p2-intro', 'maxlength', '#span-p2-intro', '#p2-intro');
-countInputLength('#change-p3-intro', 'maxlength', '#span-p3-intro', '#p3-intro');
 
 // ajout de photo dans la modal
 const inputPicture = document.getElementById("picture");
@@ -203,71 +191,14 @@ function closeModal(close, modal){
     let closeModal = document.querySelector(close);
     let modalDisplay = document.querySelector(modal);
     closeModal.addEventListener('click', ()=>{
-        let imgInput = document.getElementById("img-input");
         modalDisplay.style.display = "none";
         cardPicture.style.display = "flex" 
-        imgInput.style.display = "none";
-        inputPicture.value = "";
+        clearModal()
     })
 }
 closeModal('#close-gallery-modal', '#gallery-modal');
 closeModal('#close-picture-modal', '#picture-modal');
 
-
-// element de modal gallery
-function createElementModal(data){
-    //creation des differents elements
-    const divCard = document.createElement('div');
-    const buttonEditCard = document.createElement('button');
-    const divImage = document.createElement('img');
-    const deleteDivCard = document.createElement('i');
-    const moveDivCard = document.createElement('i');
-    
-    // ajout des valeurs de l'objet 
-    divImage.src = data.imageUrl;
-    buttonEditCard.innerHTML = "éditer";
-    divCard.setAttribute('data-category', data.categoryId);
-    divCard.setAttribute('data-id', data.id);
-    
-    // ajout des classes aux elements
-    divCard.className = 'gallery-card';
-    buttonEditCard.className = 'button-edit-img-modal';
-    deleteDivCard.className = 'fa-trash-can';
-    deleteDivCard.classList.add('fas', 'fa-trash-alt');
-    moveDivCard.className = 'fa-arrows-up-down-left-right';
-    moveDivCard.classList.add('fa-solid', 'fa-arrows-up-down-left-right');
-    
-    // liaison des enfants et des parents
-    galleryModal.appendChild(divCard);
-    divCard.appendChild(divImage);
-    divCard.appendChild(buttonEditCard);
-    divCard.appendChild(deleteDivCard);
-    divCard.appendChild(moveDivCard);
-    
-    // ajout de l'écouteur d'événements sur l'icône de poubelle
-    deleteDivCard.addEventListener('click', (e) =>{
-        e.preventDefault();
-        deleteImage(data.id);
-        document.querySelector(`[data-id="${data.id}"]`).remove()
-        document.querySelector(`[id="${data.id}"]`).remove()      
-    })
-    
-} 
-
-
-// fonction delete image
-async function deleteImage(id) {        
-    await fetch(`http://localhost:5678/api/works/${id}`, {
-    method: "DELETE",
-    headers: {
-        Accept: "*/*",
-        Authorization: "Bearer " + token,
-    },
-})  
-.catch((error) => {
-    console.error("Error:", error);
-});
-}
 
 // tout supprimer gallery
 const deleteModalGallery = document.querySelector("#delete-gallery");
@@ -282,6 +213,26 @@ const deleteAll = () => {
       deleteImage(card.dataset.id);
     });
   };
+
+//connexion + editor
+const token = localStorage.getItem('token');
+const logOut = document.querySelector('#log-out');
+const logIn = document.querySelector('#log-in');
+const editor = document.querySelector('#editor');
+const editButton = document.querySelectorAll('.edit');
+if(token){
+    logOut.style.display = "block";
+    logIn.style.display = "none";
+    editor.style.display = "flex";
+    editButton.forEach(button => button.style.display = "block");
+}else{
+    logOut.style.display = "none";
+    logIn.style.display = "block";
+    editor.style.display = "none";
+    editButton.forEach(button => button.style.display = "none");
+} 
+
+
 
 // formulaire d'envoi
 const form = document.getElementById("myForm");
@@ -345,37 +296,19 @@ form.addEventListener("submit", async(e) => {
 .catch(error => console.error("Error:", error));
 });
 
-// stockage image lors du click sur les bouton publier changement (Feature non demandé dans le projet)
-const imgIntroStock= localStorage.getItem("imgIntroStock");
-// bouton publier changement
-const buttonEditor = document.querySelector('#editor button');
-buttonEditor.addEventListener('click', () =>{
-    const imgIntroLocalStorage= localStorage.getItem("imgIntro");
-    if (imgIntroLocalStorage) {
-        localStorage.setItem("imgIntroStock", imgIntroLocalStorage);
-    }
-})
-
-if (imgIntroStock) {        
-    imgIntro.src = imgIntroStock
-}
-
 // back to modal projet
-
+const imgInputModal = document.querySelector("#img-input")
 const backToProject = document.querySelector("#back-to-modal");
 backToProject.addEventListener('click', ()=>{  
-    let imgInput = document.getElementById("img-input");  
     modalPicture.style.display = "none";
     modalProjet.style.display = "flex";
     cardPicture.style.display = "flex";
-    imgInput.remove();
-    inputPicture.value = "";    
+    clearModal()
     
 })
 // bouton logOut
 logOut.addEventListener('click', () =>{
     localStorage.removeItem('token');
-    localStorage.removeItem('imgIntro');
     if (token) {
         logOut.style.display = "none";
         logIn.style.display = "block";    
