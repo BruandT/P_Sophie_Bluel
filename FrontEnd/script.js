@@ -2,10 +2,19 @@ const url = 'http://localhost:5678/api';
 const urlWorks = `${url}/works`;
 const imagesContainer = document.querySelector('.gallery');
 const galleryModal = document.querySelector('#gallery-main');
+// pour test le delete
+let count = 0;
 
+let formDataArray = [];
+window.onload = ()=>{
+    sessionStorage.removeItem("idDeleted")
+
+}
+
+// reset les galeries principale et modale
 resetGallery();
 
-
+// appel les works de l'api
 async function getData(urlWorks){
     await fetch(urlWorks)
     .then(response => {
@@ -16,7 +25,14 @@ async function getData(urlWorks){
     .then(function(data){
         for (let i = 0; i < data.length; i++) {
             createElement(data[i]);
-            createElementModal(data[i]);              
+            createElementModal(data[i]);
+            // pour test le delete
+            const ids = data.map(item => item.id);
+            // Convertit le tableau d'IDs en chaîne de caractères JSON
+            const idsString = JSON.stringify(ids);
+            sessionStorage.setItem('ids', idsString);
+
+            
         }
         
         const liItem = document.querySelectorAll('#tri li');
@@ -58,7 +74,7 @@ function createElement(data){
     figureImage.alt = data.title;
     figureCaption.innerHTML = data.title;
     figure.setAttribute('data-category', data.categoryId);
-    figure.setAttribute('id', data.id);
+    figure.setAttribute('data-id', data.id);
     
     // liaison des enfants et des parents
     imagesContainer.appendChild(figure);
@@ -78,7 +94,7 @@ function createElementModal(data){
     divImage.src = data.imageUrl;
     buttonEditCard.innerHTML = "éditer";
     divCard.setAttribute('data-category', data.categoryId);
-    divCard.setAttribute('data-id', data.id);
+    divCard.setAttribute('id', data.id);
     
     // ajout des classes aux elements
     divCard.className = 'gallery-card';
@@ -97,32 +113,22 @@ function createElementModal(data){
 
 
     // ajout de l'écouteur d'événements sur l'icône de poubelle
-    deleteDivCard.addEventListener('click', (e) =>{
-        e.preventDefault();         
-        deleteImage(data.id);
-    })
+    deleteDivCard.onclick = ()=>{   
+    // Obtenir le tableau actuel de 'idDeleted' dans le sessionStorage, ou créer un nouveau tableau vide
+    let idDeletedArray = JSON.parse(sessionStorage.getItem('idDeleted')) || [];
+
+    // Ajouter la nouvelle valeur à la fin du tableau
+    idDeletedArray.push(data.id);
+
+    // Mettre à jour le tableau dans le sessionStorage
+    sessionStorage.setItem('idDeleted', JSON.stringify(idDeletedArray));
+        document.querySelector(`[data-id="${data.id}"]`).remove()
+        document.querySelector(`[id="${data.id}"]`).remove()  
+        deleteDivCard.onclick = null
+    }
     
 
     
-} 
-// fonction delete image
-async function deleteImage(id) {        
-    await fetch(`http://localhost:5678/api/works/${id}`, {
-    method: "DELETE",
-    headers: {
-        Accept: "*/*",
-        Authorization: "Bearer " + token,
-    },
-})
-.then(response => {
-    if (response.ok) {
-        document.querySelector(`[data-id="${id}"]`).remove()
-        document.querySelector(`[id="${id}"]`).remove()  
-    }
-})
-    .catch((error) => {
-        console.error("Error:", error);
-    });
 }
 
 function resetGallery(){
@@ -207,12 +213,11 @@ deleteModalGallery.addEventListener('click', (e)=>{
     e.preventDefault();
     deleteAll();
 })
-const deleteAll = () => {
-    const cardContainer = document.querySelectorAll(".gallery-card");
-    cardContainer.forEach((card) => {
-      deleteImage(card.dataset.id);
-    });
-  };
+const deleteAll = () => {  
+    const valueCopy = sessionStorage.getItem('ids');
+    sessionStorage.setItem('valueDel', valueCopy);
+    resetGallery();
+};
 
 //connexion + editor
 const token = localStorage.getItem('token');
@@ -274,27 +279,150 @@ function checkItems(e) {
 // event verification des champs
 form.addEventListener("change", checkItems);
 
-// event recuperation des champs + envoi
-form.addEventListener("submit", async(e) => {
-    e.preventDefault(); 
+// creation dans le dom
+form.addEventListener("submit", async (e) => {    
+    e.preventDefault();
     const title = document.getElementById("picture-title");
     const category = document.getElementById("categories-picture");
-    const imageAdd = document.getElementById("picture");   
+    const imageAdd = document.getElementById("picture");
+    const figure = document.createElement('figure');
+    const figureCaption = document.createElement('figcaption');
+    const figureImage = document.createElement('img');
+    const divImage = document.createElement('img');
+    count++
+    let idTemporaire = `temp${count}`;
+
+    // input file 
+    const file = imageAdd.files[0];
+    const reader = new FileReader();
+    reader.onload = (event) => {
+        // Attribution de l'URL de données à la propriété src de l'élément img
+        figureImage.src = event.target.result;
+        divImage.src = event.target.result; 
+    };
+    reader.readAsDataURL(file);
     
-    let formData = new FormData();
-    formData.append("title", title.value);
-    formData.append("category", category.value);
-    formData.append("image", imageAdd.files[0]);
+    figureImage.alt = title.value;
+    figureCaption.innerHTML = title.value;
+    figure.setAttribute('data-category', category.value);
+    figure.setAttribute('id-tempo', idTemporaire);
     
-    await fetch(urlWorks, {
-        method: "POST",            
-        headers: {Accept: "application/json",
-        Authorization: "Bearer " + token,
-    },
-    body: formData
-})
-.catch(error => console.error("Error:", error));
+    imagesContainer.appendChild(figure);
+    figure.appendChild(figureImage);
+    figure.appendChild(figureCaption);
+    
+    const divCard = document.createElement('div');
+    const buttonEditCard = document.createElement('button');
+    const deleteDivCard = document.createElement('i');
+    const moveDivCard = document.createElement('i');
+    
+    // ajout des valeurs de l'objet 
+    buttonEditCard.innerHTML = "éditer";
+    divCard.setAttribute('data-category', category.value);
+    divCard.setAttribute('id-tempo', idTemporaire);
+    divCard.style.display = "flex";
+    // divCard.setAttribute('data-id', data.id);
+    
+    // ajout des classes aux elements
+    divCard.className = 'gallery-card';
+    buttonEditCard.className = 'button-edit-img-modal';
+    deleteDivCard.className = 'fa-trash-can';
+    deleteDivCard.classList.add('fas', 'fa-trash-alt');
+    moveDivCard.className = 'fa-arrows-up-down-left-right';
+    moveDivCard.classList.add('fa-solid', 'fa-arrows-up-down-left-right');
+    
+    // liaison des enfants et des parents
+    galleryModal.appendChild(divCard);
+    divCard.appendChild(divImage);
+    divCard.appendChild(buttonEditCard);
+    divCard.appendChild(deleteDivCard);
+    divCard.appendChild(moveDivCard);
+
+   // Créer un nouvel objet FormData pour chaque élément
+   let formData = new FormData();
+   formData.append("title", title.value);
+   formData.append("category", category.value);
+   formData.append("image", imageAdd.files[0]);
+   formDataArray.push(formData)
+  
+    
+    // Récupère le tableau d'IDs depuis le sessionStorage avec la clé spécifique
+    const idsString = sessionStorage.getItem('ids');
+    // Convertit la chaîne de caractères JSON en tableau JavaScript
+    const ids = JSON.parse(idsString);
+    
+    // Ajoute le nouvel ID à la fin du tableau
+    const newId = ids[ids.length - 1] + 1; // Ajoute +1 au dernier élément du tableau
+    ids.push(newId);
+    
+    // Convertit le tableau en chaîne de caractères JSON
+    const updatedIdsString = JSON.stringify(ids);
+    // Stocke le tableau mis à jour dans le sessionStorage avec la clé spécifique
+    sessionStorage.setItem('ids', updatedIdsString);
+    
+    
+    
+    // ajout de l'écouteur d'événements sur l'icône de poubelle
+    deleteDivCard.onclick = ()=>{ 
+        // Obtenir le tableau actuel de 'idDeleted' dans le sessionStorage, ou créer un nouveau tableau vide
+        let idDeletedArray = JSON.parse(sessionStorage.getItem('idDeleted')) || [];
+        
+        // Ajouter la nouvelle valeur à la fin du tableau
+        idDeletedArray.push();
+        
+        // Mettre à jour le tableau dans le sessionStorage
+        sessionStorage.setItem('idDeleted', JSON.stringify(idDeletedArray));
+
+        if (typeof data === 'undefined') {
+            document.querySelector(`[id-tempo="${idTemporaire}"]`).remove(); 
+        } else {
+            document.querySelector(`[id="${data.id}"]`).remove()
+        }       
+        deleteDivCard.onclick = null
+    }
+    modalPicture.style.display = "none";
+    modalProjet.style.display = "flex";
+    cardPicture.style.display = "flex";
+    clearModal()
 });
+
+// // event recuperation des champs + envoi
+// form.addEventListener("submit", async(e) => {
+//     e.preventDefault(); 
+//     const title = document.getElementById("picture-title");
+//     const category = document.getElementById("categories-picture");
+//     const imageAdd = document.getElementById("picture");  
+//     const figure = document.createElement('figure');
+//     const figureCaption = document.createElement('figcaption');
+//     const figureImage = document.createElement('img');
+//     console.log(imageAdd);
+    
+//     // ajout des valeurs de l'objet 
+//     figureImage.src = imageAdd.files[0];
+//     figureImage.alt = title.value;
+//     figureCaption.innerHTML = title.value;
+//     figure.setAttribute('data-category', category.value);
+//     // figure.setAttribute('id', data.id);
+    
+//     // liaison des enfants et des parents
+//     imagesContainer.appendChild(figure);
+//     figure.appendChild(figureImage);
+//     figure.appendChild(figureCaption); 
+    
+// //     let formData = new FormData();
+// //     formData.append("title", title.value);
+// //     formData.append("category", category.value);
+// //     formData.append("image", imageAdd.files[0]);
+    
+// //     await fetch(urlWorks, {
+// //         method: "POST",            
+// //         headers: {Accept: "application/json",
+// //         Authorization: "Bearer " + token,
+// //     },
+// //     body: formData
+// // })
+// // .catch(error => console.error("Error:", error));
+// });
 
 // back to modal projet
 const imgInputModal = document.querySelector("#img-input")
@@ -314,3 +442,82 @@ logOut.addEventListener('click', () =>{
         logIn.style.display = "block";    
     }
 })
+const changeBtn = document.querySelector("#change-btn");
+changeBtn.addEventListener('click', (e) => {
+    e.preventDefault() 
+    if (sessionStorage.getItem('valueDel')) {
+        let idDel = JSON.parse(sessionStorage.getItem('valueDel'));
+        if (idDel.length > 0) {
+            // Itérer sur chaque élément du tableau
+            idDel.forEach((id) => {
+                // Envoyer une requête DELETE pour supprimer l'élément correspondant du serveur
+                fetch(`http://localhost:5678/api/works/${id}`, {
+                    method: "DELETE",
+                    headers: {
+                        Accept: "*/*",
+                        Authorization: "Bearer " + token,
+                    },
+                })
+                .then((response) => {
+                    if (response.ok) {
+                        // Supprimer l'élément du tableau localement
+                        idDel.splice(idDel.indexOf(id), 1);
+                        // Mettre à jour le tableau dans le sessionStorage
+                        sessionStorage.setItem('valueDel', JSON.stringify(idDel));
+                    } else {
+                        console.error("Error:", response.statusText);
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                });
+            });
+        }
+    } else {
+        // Obtenir le tableau actuel de 'idDeleted' dans le sessionStorage
+    let idDeletedArray = JSON.parse(sessionStorage.getItem('idDeleted')) || [];
+    // Vérifier si le tableau contient des éléments
+    if (idDeletedArray.length > 0) {
+        // Itérer sur chaque élément du tableau
+        idDeletedArray.forEach((id) => {
+            // Envoyer une requête DELETE pour supprimer l'élément correspondant du serveur
+            fetch(`http://localhost:5678/api/works/${id}`, {
+                method: "DELETE",
+                headers: {
+                    Accept: "*/*",
+                    Authorization: "Bearer " + token,
+                },
+            })
+            .then((response) => {
+                if (response.ok) {
+                    // Supprimer l'élément du tableau localement
+                    idDeletedArray.splice(idDeletedArray.indexOf(id), 1);
+                    // Mettre à jour le tableau dans le sessionStorage
+                    sessionStorage.setItem('idDeleted', JSON.stringify(idDeletedArray));
+                } else {
+                    console.error("Error:", response.statusText);
+                }
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+            });
+        });
+    }
+    }   
+    
+    
+   
+    // envois a l'api par rapport au nombre de formData dans le formDataArray
+    formDataArray.forEach(function(formData) {       
+        fetch("http://localhost:5678/api/works", {
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            Authorization: "Bearer " + token,
+        },
+        body: formData,
+    })
+    .catch((error) => console.error("Error:", error));
+});
+
+});
