@@ -598,7 +598,7 @@ hr{
 }
 #categories-picture{
 	appearance: none;
-	background-image: url("/FrontEnd/assets/icons/arrow.png");
+	background-image: url('./icons/arrow.png');
 	background-position: right 25px center;
 	background-repeat: no-repeat;
 }
