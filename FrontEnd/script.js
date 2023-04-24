@@ -68,18 +68,18 @@ function createElement(data){
     const figure = document.createElement('figure');
     figure.setAttribute('data-category', data.categoryId);
     figure.setAttribute('data-id', data.id);
-    imagesContainer.appendChild(figure);
-
-    // Creation de <figcaption>
-    const figureCaption = document.createElement('figcaption');
-    figureCaption.innerHTML = data.title;
-    figure.appendChild(figureCaption);
+    imagesContainer.appendChild(figure);    
 
     // Creation de <img>
     const figureImage = document.createElement('img');
     figureImage.src = data.imageUrl;
     figureImage.alt = data.title;
-    figure.appendChild(figureImage);   
+    figure.appendChild(figureImage); 
+
+    // Creation de <figcaption>
+    const figureCaption = document.createElement('figcaption');
+    figureCaption.innerHTML = data.title;
+    figure.appendChild(figureCaption);  
 }
 
 // Element de la modale
@@ -323,11 +323,6 @@ form.addEventListener("submit", async (e) => {
     const figure = document.createElement('figure');
     figure.setAttribute('data-category', category.value);
     imagesContainer.appendChild(figure);
-
-    // Creation de <figcaption>
-    const figureCaption = document.createElement('figcaption');
-    figureCaption.innerHTML = title.value;
-    figure.appendChild(figureCaption);
     
     // Creation de <img> + ajout de l'image
     const figureImage = document.createElement('img');
@@ -341,7 +336,11 @@ form.addEventListener("submit", async (e) => {
     reader.readAsDataURL(file);
     figureImage.alt = title.value;
     figure.appendChild(figureImage);
-    
+
+    // Creation de <figcaption>
+    const figureCaption = document.createElement('figcaption');
+    figureCaption.innerHTML = title.value;
+    figure.appendChild(figureCaption);    
     
     // Creation de la <div> pour les projets dans la modale
     const divCard = document.createElement('div');  
